@@ -62,7 +62,7 @@ resource "aws_backup_plan" "this" {
     completion_window        = var.continuous_backup_completion_window
 
     lifecycle {
-      delete_after = 35
+      delete_after = var.continuous_backup_retention_days
     }
 
     # Copy to all vaults including same-region (AWS handles this correctly)
