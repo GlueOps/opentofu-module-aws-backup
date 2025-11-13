@@ -29,5 +29,5 @@ variable "vault_lock_min_retention_days" {
 variable "vault_lock_max_retention_days" {
   description = "Maximum number of days backups can be retained"
   type        = number
-  default     = 7
+  default     = 120
 }
