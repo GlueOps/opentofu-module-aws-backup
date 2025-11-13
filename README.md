@@ -1,2 +1,3 @@
-# opentofu-module-aws-backup
-Managed by github-org-manager
+<!-- BEGIN_TF_DOCS -->
+
+<!-- END_TF_DOCS -->
