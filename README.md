@@ -13,7 +13,7 @@ A multi-region AWS Backup module that creates backup vaults across multiple regi
 - **Smart Exclusions**: Automatically excludes S3 buckets with `-loki-` in their name
 - **Vault Lock (Compliance Mode)**: Optional immutable backup retention enforcement
 - **Minimal Configuration**: Only requires `tenant_key` and `regions` array
-- **Role Assumption**: Optional IAM role assumption for cross-account scenarios
+- **Role Assumption**: IAM role assumption for cross-account scenarios
 
 ## Architecture
 
@@ -71,7 +71,7 @@ module "backup" {
     "us-east-2"
   ]
   # Optional: IAM role to assume for AWS API calls
-  assume_role_arn = "arn:aws:iam::123456789012:role/BackupRole"
+  assume_role_arn = "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole"
   # Retention settings
   backup_retention_days            = 7   # Snapshot backups and copies (default: 7)
   continuous_backup_retention_days = 35  # Continuous backups, max 35 days (default: 35)
