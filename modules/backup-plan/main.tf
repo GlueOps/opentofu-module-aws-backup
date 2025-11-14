@@ -1,14 +1,18 @@
 # Generate UUIDs for unique resource naming
 resource "random_uuid" "role" {}
-resource "random_uuid" "plan" {}
-resource "random_uuid" "selection" {}
+resource "random_uuid" "continuous_plan" {}
+resource "random_uuid" "snapshot_plan" {}
+resource "random_uuid" "continuous_selection" {}
+resource "random_uuid" "snapshot_selection" {}
 
 # Local variables
 locals {
   # UUIDs for unique naming
-  role_uuid      = random_uuid.role.result
-  plan_uuid      = random_uuid.plan.result
-  selection_uuid = random_uuid.selection.result
+  role_uuid                = random_uuid.role.result
+  continuous_plan_uuid     = random_uuid.continuous_plan.result
+  snapshot_plan_uuid       = random_uuid.snapshot_plan.result
+  continuous_selection_uuid = random_uuid.continuous_selection.result
+  snapshot_selection_uuid   = random_uuid.snapshot_selection.result
 }
 
 # Create IAM role for AWS Backup
@@ -50,9 +54,9 @@ resource "aws_iam_role_policy_attachment" "backup_policies" {
   policy_arn = each.value
 }
 
-# Create backup plan with continuous backup and cross-region copy
-resource "aws_backup_plan" "this" {
-  name = local.plan_uuid
+# Create continuous backup plan
+resource "aws_backup_plan" "continuous" {
+  name = local.continuous_plan_uuid
 
   # Continuous backup rule (for supported resources like S3)
   rule {
@@ -80,6 +84,19 @@ resource "aws_backup_plan" "this" {
     }
   }
 
+  tags = {
+    Name        = "${var.tenant_key}-${var.region}-continuous-backup-plan"
+    tenant_name = var.tenant_key
+    region      = var.region
+    managed_by  = "opentofu"
+    uuid        = local.continuous_plan_uuid
+  }
+}
+
+# Create snapshot backup plan
+resource "aws_backup_plan" "snapshot" {
+  name = local.snapshot_plan_uuid
+
   # Snapshot backup rule (hourly for all resources)
   rule {
     rule_name         = "hourly-snapshot-backup"
@@ -106,19 +123,31 @@ resource "aws_backup_plan" "this" {
   }
 
   tags = {
-    Name        = "${var.tenant_key}-${var.region}-backup-plan"
+    Name        = "${var.tenant_key}-${var.region}-snapshot-backup-plan"
     tenant_name = var.tenant_key
     region      = var.region
     managed_by  = "opentofu"
-    uuid        = local.plan_uuid
+    uuid        = local.snapshot_plan_uuid
   }
 }
 
-# Create backup selection for S3 buckets (excluding -loki- buckets)
-resource "aws_backup_selection" "s3" {
+# Create backup selection for continuous backups (S3 buckets in this region)
+resource "aws_backup_selection" "continuous" {
   iam_role_arn = aws_iam_role.backup.arn
-  name         = local.selection_uuid
-  plan_id      = aws_backup_plan.this.id
+  name         = local.continuous_selection_uuid
+  plan_id      = aws_backup_plan.continuous.id
+
+  resources = ["arn:aws:s3:::*"]
+  
+  # Exclude buckets with -loki- in the name
+  not_resources = ["arn:aws:s3:::*-loki-*"]
+}
+
+# Create backup selection for snapshots (S3 buckets in this region)
+resource "aws_backup_selection" "snapshot" {
+  iam_role_arn = aws_iam_role.backup.arn
+  name         = local.snapshot_selection_uuid
+  plan_id      = aws_backup_plan.snapshot.id
 
   resources = ["arn:aws:s3:::*"]
   

@@ -12,16 +12,30 @@ output "backup_vault_ids" {
   }
 }
 
-output "backup_plan_ids" {
-  description = "Map of region to backup plan ID"
+output "continuous_backup_plan_ids" {
+  description = "Map of region to continuous backup plan ID"
   value = {
-    for region, plan in module.backup_plan : region => plan.backup_plan_id
+    for region, plan in module.backup_plan : region => plan.continuous_backup_plan_id
   }
 }
 
-output "backup_plan_arns" {
-  description = "Map of region to backup plan ARN"
+output "snapshot_backup_plan_ids" {
+  description = "Map of region to snapshot backup plan ID"
   value = {
-    for region, plan in module.backup_plan : region => plan.backup_plan_arn
+    for region, plan in module.backup_plan : region => plan.snapshot_backup_plan_id
+  }
+}
+
+output "continuous_backup_plan_arns" {
+  description = "Map of region to continuous backup plan ARN"
+  value = {
+    for region, plan in module.backup_plan : region => plan.continuous_backup_plan_arn
+  }
+}
+
+output "snapshot_backup_plan_arns" {
+  description = "Map of region to snapshot backup plan ARN"
+  value = {
+    for region, plan in module.backup_plan : region => plan.snapshot_backup_plan_arn
   }
 }
