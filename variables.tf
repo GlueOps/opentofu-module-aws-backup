@@ -8,7 +8,7 @@ variable "regions" {
   description = "List of AWS regions where backup vaults will be created"
   type        = list(string)
   nullable    = false
-  
+
   validation {
     condition     = length(var.regions) > 0
     error_message = "At least one region must be specified."
@@ -31,7 +31,7 @@ variable "continuous_backup_retention_days" {
   description = "Number of days to retain continuous backups (max 35 days for AWS Backup continuous backups)"
   type        = number
   default     = 35
-  
+
   validation {
     condition     = var.continuous_backup_retention_days >= 1 && var.continuous_backup_retention_days <= 35
     error_message = "Continuous backup retention must be between 1 and 35 days."
@@ -42,7 +42,7 @@ variable "continuous_backup_retention_days" {
 variable "snapshot_schedule" {
   description = "Cron expression for snapshot backup schedule"
   type        = string
-  default     = "cron(0 * * * ? *)"  # Hourly
+  default     = "cron(0 * * * ? *)" # Hourly
 }
 
 variable "snapshot_start_window" {
@@ -61,7 +61,7 @@ variable "snapshot_completion_window" {
 variable "continuous_backup_schedule" {
   description = "Cron expression for continuous backup (AWS default for continuous backup)"
   type        = string
-  default     = "cron(0 5 ? * * *)"  # Daily at 5 AM UTC
+  default     = "cron(0 5 ? * * *)" # Daily at 5 AM UTC
 }
 
 variable "continuous_backup_start_window" {
@@ -80,7 +80,7 @@ variable "continuous_backup_completion_window" {
 variable "vault_lock_changeable_days" {
   description = "Number of days the vault lock can be changed before becoming immutable. Set to 0 to make it immediately immutable."
   type        = number
-  default     = 365  # Long window for flexibility
+  default     = 365 # Long window for flexibility
 }
 
 variable "vault_lock_min_retention_days" {
@@ -92,7 +92,7 @@ variable "vault_lock_min_retention_days" {
 variable "vault_lock_max_retention_days" {
   description = "Maximum number of days backups can be retained (compliance requirement)"
   type        = number
-  default     = 120  # Short max retention by default
+  default     = 120 # Short max retention by default
 }
 
 variable "enable_vault_lock" {
