@@ -130,8 +130,10 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_backup_plan_arns"></a> [backup\_plan\_arns](#output\_backup\_plan\_arns) | Map of region to backup plan ARN |
-| <a name="output_backup_plan_ids"></a> [backup\_plan\_ids](#output\_backup\_plan\_ids) | Map of region to backup plan ID |
 | <a name="output_backup_vault_arns"></a> [backup\_vault\_arns](#output\_backup\_vault\_arns) | Map of region to backup vault ARN |
 | <a name="output_backup_vault_ids"></a> [backup\_vault\_ids](#output\_backup\_vault\_ids) | Map of region to backup vault ID |
+| <a name="output_continuous_backup_plan_arns"></a> [continuous\_backup\_plan\_arns](#output\_continuous\_backup\_plan\_arns) | Map of region to continuous backup plan ARN |
+| <a name="output_continuous_backup_plan_ids"></a> [continuous\_backup\_plan\_ids](#output\_continuous\_backup\_plan\_ids) | Map of region to continuous backup plan ID |
+| <a name="output_snapshot_backup_plan_arns"></a> [snapshot\_backup\_plan\_arns](#output\_snapshot\_backup\_plan\_arns) | Map of region to snapshot backup plan ARN |
+| <a name="output_snapshot_backup_plan_ids"></a> [snapshot\_backup\_plan\_ids](#output\_snapshot\_backup\_plan\_ids) | Map of region to snapshot backup plan ID |
 <!-- END_TF_DOCS -->
