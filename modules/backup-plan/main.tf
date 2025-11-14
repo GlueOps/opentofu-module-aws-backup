@@ -71,6 +71,13 @@ resource "aws_backup_plan" "continuous" {
       delete_after = var.continuous_backup_retention_days
     }
 
+    recovery_point_tags = {
+      backup_type = "continuous"
+      tenant_name = var.tenant_key
+      region      = var.region
+      managed_by  = "opentofu"
+    }
+
     # Copy to all vaults including same-region (AWS handles this correctly)
     dynamic "copy_action" {
       for_each = var.all_vault_arns
@@ -107,6 +114,13 @@ resource "aws_backup_plan" "snapshot" {
 
     lifecycle {
       delete_after = var.backup_retention_days
+    }
+
+    recovery_point_tags = {
+      backup_type = "snapshot"
+      tenant_name = var.tenant_key
+      region      = var.region
+      managed_by  = "opentofu"
     }
 
     # Copy snapshots to all vaults including same-region (AWS handles this correctly)
